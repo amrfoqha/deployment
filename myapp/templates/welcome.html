@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'style.css' %}">
+</head>
+
+<body>
+
+    <nav class="border-b-2 border-black flex justify-between w-1/2 mx-auto mt-5 py-2 px-4 text-2xl ">
+        <div class="flex mt-2 text-3xl ml-2">
+            <h1 class="mr-5">Welcome</h1>
+            <h1 class="text-red-700 ">{{user.first_name}} ,To the developers Dashboard</h1>
+        </div>
+        </div><a href="/logout" class="text-blue-600 underline mt-2">LogOut</a>
+    </nav>
+    <div class="flex flex-col items-center justify-center min-w-max">
+        <a href="/view_create_project"
+            class="text-center mx-auto mt-20 text-2xl border-2 border-black shadow-[3px_3px_0px_black] px-1 py-1">+
+            Create
+            Project</a>
+        <div class="w-2/3 mt-5 text-xl mx-auto">
+            <table class="w-full border border-black">
+                <thead class="pl-5">
+                    <tr class="border border-black">
+                        <th class="py-1">ID</th>
+                        <th class="py-1">Project Name</th>
+                        <th class="py-1">Project Owner</th>
+                        <th class="py-1">Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for project in projects %}
+                    <tr class="border border-black">
+                        <th class="py-1">{{project.id}}</th>
+                        <th class="py-1"><a href="/view_project/{{project.id}}"
+                                class="text-blue-600 underline">{{project.name}}</a></th>
+                        <th class="py-1">{{project.user.first_name}} {{project.user.last_name}}</th>
+
+                        {% if project.user.id == user.id %}
+                        <th class="py-1"><a href="/delete_project/{{project.id}}">Delete</a></th>
+                        {% else %}
+                        <th class="py-1">
+
+
+                            {% if project.id in joined_project_ids %}
+                            <a href="/leave_project/{{ project.id }}">Separate -</a>
+                            {% else %}
+                            <a href="/join_project/{{ project.id }}">Join +</a>
+                            {% endif %}
+
+                        </th>
+                        {% endif %}
+                    </tr>
+                    {% endfor %}
+                </tbody>
+
+            </table>
+        </div>
+    </div>
+</body>
+
+</html>
